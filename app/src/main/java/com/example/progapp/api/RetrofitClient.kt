@@ -3,15 +3,13 @@ package com.example.progapp.api
 import android.content.Context
 import com.example.progapp.domain.RegisterBody
 import com.example.progapp.domain.SignInBody
+import com.example.progapp.domain.TestsResponse
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ApiInterface {
 
@@ -22,6 +20,9 @@ interface ApiInterface {
     @Headers("Content-Type:application/json")
     @POST("users")
     fun registerUser(@Body info: RegisterBody): retrofit2.Call<ResponseBody>
+
+    @GET("users/")
+    fun fetchTests(@Header("Authorization") token: String): retrofit2.Call<TestsResponse>
 
 }
 
