@@ -1,5 +1,6 @@
 package com.example.progapp.api
 
+import android.content.Context
 import com.example.progapp.domain.RegisterBody
 import com.example.progapp.domain.SignInBody
 import okhttp3.OkHttpClient
@@ -8,14 +9,15 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface ApiInterface {
 
     @Headers("Content-Type:application/json")
-    @POST("auth_tokens")
-    fun signin(@Body info: SignInBody): retrofit2.Call<ResponseBody>
+    @POST("tokens")
+    fun signin(@Header("Authorization") h1:String): retrofit2.Call<ResponseBody>
 
     @Headers("Content-Type:application/json")
     @POST("users")
@@ -33,11 +35,16 @@ class RetrofitInstance {
             this.addInterceptor(interceptor)
         }.build()
 
-        fun getRetrofitInstance(): Retrofit {
+        fun getRetrofitInstance(context: Context): Retrofit {
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .client(client)
+                .client(okhttpClient(context))
                 .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        }
+        private fun okhttpClient(context: Context): OkHttpClient {
+            return OkHttpClient.Builder()
+                .addInterceptor(AuthInterceptor(context))
                 .build()
         }
     }

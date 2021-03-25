@@ -34,12 +34,11 @@ class RegisterFragment : Fragment() {
 
         viewModel.eventButtonClicked.observe(viewLifecycleOwner, Observer { isClicked ->
             if (isClicked) {
-                viewModel.onRegisterPassed()
                 viewModel.signup(
                     binding.login.text.toString(),
                     binding.email.text.toString(),
                     binding.password.text.toString(),
-                    context
+                    context!!
                 )
             }
         })
